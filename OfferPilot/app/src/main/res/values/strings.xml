@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">OfferPilot</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="empty_job_title">还没有目标岗位</string>
+    <string name="empty_job_description">添加一个开始练习</string>
+    <string name="add_job">添加岗位</string>
+</resources>
