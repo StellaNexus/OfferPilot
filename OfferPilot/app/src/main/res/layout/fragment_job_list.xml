@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+    android:id="@+id/empty_state"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="24dp">
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,5 +30,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="添加岗位" />
+    </LinearLayout>
 
-</LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recycler_jobs"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"/>
+    
+
+</FrameLayout>
