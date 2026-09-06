@@ -28,6 +28,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         <com.google.android.material.textfield.TextInputLayout 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/til_position"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_marginBottom="16dp"
         android:hint="职位名称">
@@ -38,6 +39,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         <com.google.android.material.textfield.TextInputLayout 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/til_company"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_marginBottom="16dp"
         android:hint="公司名称">
@@ -48,6 +50,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         <com.google.android.material.textfield.TextInputLayout 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/til_jd"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_marginBottom="16dp"
         android:hint="JD描述">
