@@ -37,28 +37,30 @@ public class AddJobFragment extends Fragment {
         MaterialButton buttonSave = view.findViewById(R.id.button_save);
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> {
-        getParentFragmentManager().popBackStack();
-});
+            getParentFragmentManager().popBackStack();
+        });
         buttonSave.setOnClickListener(v -> {
-    String position = tilPosition.getEditText().getText().toString().trim();
-    String company = tilCompany.getEditText().getText().toString().trim();
-    String jd = tilJd.getEditText().getText().toString().trim();
-    if (position.isEmpty()) {
-    tilPosition.setError("此项必填");
-    return;
-}
-if (company.isEmpty()) {
-    tilCompany.setError("此项必填");
-    return;
-}
-if (jd.isEmpty()) {
-    tilJd.setError("此项必填");
-    return;
-}
-Toast.makeText(requireContext(), "保存成功", Toast.LENGTH_SHORT).show();
-getParentFragmentManager().popBackStack();
-});
+            String position = tilPosition.getEditText().getText().toString().trim();
+            String company = tilCompany.getEditText().getText().toString().trim();
+            String jd = tilJd.getEditText().getText().toString().trim();
+            if (position.isEmpty()) {
+                tilPosition.setError("此项必填");
+                return;
+            }
+            if (company.isEmpty()) {
+                tilCompany.setError("此项必填");
+                return;
+            }
+            if (jd.isEmpty()) {
+                tilJd.setError("此项必填");
+                return;
+            }
+            Job newJob = new Job(position, company, jd);
+            JobListFragment.jobList.add(0, newJob);
 
-    
+            Toast.makeText(requireContext(), "保存成功", Toast.LENGTH_SHORT).show();
+            getParentFragmentManager().popBackStack();
+        });
+
     }
 }
