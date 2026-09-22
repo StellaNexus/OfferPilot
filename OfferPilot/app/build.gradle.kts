@@ -40,4 +40,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
     implementation(libs.viewpager2)
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+
 }
