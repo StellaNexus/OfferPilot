@@ -18,8 +18,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import android.widget.LinearLayout;
+
+
 public class PracticeFragment extends Fragment {
     private String currentMode = "quick";
+    private PracticeRepository practiceRepository;
+
 
     private final int selectedColor = Color.rgb(210, 225, 250);
     private final int selectedStrokeColor = Color.rgb(210, 225, 250);
@@ -41,6 +49,7 @@ public class PracticeFragment extends Fragment {
                 false
         );
 
+        practiceRepository = new PracticeRepository(requireContext());
 
 
         EditText chatInput = view.findViewById(R.id.edit_chat_input);
@@ -138,6 +147,87 @@ public class PracticeFragment extends Fragment {
                 standardPracticeCard,
                 fullMockInterviewCard
         );
+
+        DrawerLayout practiceDrawer = view.findViewById(R.id.practice_drawer);
+        View historyButton = view.findViewById(R.id.button_history);
+        View closeHistoryButton = view.findViewById(R.id.button_close_history);
+
+        historyButton.setOnClickListener(v -> {
+            LinearLayout historyList = view.findViewById(R.id.history_list_container);
+            TextView emptyHistory = view.findViewById(R.id.text_empty_history);
+
+            practiceRepository.getSessions(sessions -> {
+                if (!isAdded() || getView() != view) {
+                    return;
+                }
+
+                historyList.removeAllViews();
+                emptyHistory.setVisibility(sessions.isEmpty() ? View.VISIBLE : View.GONE);
+
+                for (PracticeSession session : sessions) {
+                    TextView item = new TextView(requireContext());
+                    String modeText;
+
+                    if ("quick".equals(session.getPracticeMode())) {
+                        modeText = "快速练习";
+                    } else if ("standard".equals(session.getPracticeMode())) {
+                        modeText = "标准练习";
+                    } else {
+                        modeText = "完整面试";
+                    }
+
+                    String statusText =
+                            "FINISHED".equals(session.getStatus())
+                                    ? "已完成"
+                                    : "进行中";
+
+                    item.setText(modeText + " · " + statusText);
+                    item.setTextSize(16);
+                    item.setPadding(12, 20, 12, 20);
+
+                    item.setOnClickListener(clicked -> {
+                        Bundle args = new Bundle();
+                        args.putLong("session_id", session.getId());
+                        args.putString("practice_mode", session.getPracticeMode());
+
+                        QuestionFragment questionFragment = new QuestionFragment();
+                        questionFragment.setArguments(args);
+
+                        practiceDrawer.closeDrawer(Gravity.LEFT);
+                        mainContent.setVisibility(View.GONE);
+                        fragmentContainer.setVisibility(View.VISIBLE);
+
+                        getParentFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment_container, questionFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    });
+
+
+                    historyList.addView(item);
+                }
+            });
+
+            practiceDrawer.openDrawer(Gravity.LEFT);
+        });
+
+        closeHistoryButton.setOnClickListener(v -> {
+            practiceDrawer.closeDrawer(Gravity.LEFT);
+        });
+
+        View newPracticeButton = view.findViewById(R.id.button_new_practice);
+
+        newPracticeButton.setOnClickListener(v -> {
+            chatInput.setText("");
+            currentMode = "quick";
+            updateModeSelection(
+                    quickPracticeCard,
+                    standardPracticeCard,
+                    fullMockInterviewCard
+            );
+            practiceDrawer.closeDrawer(Gravity.LEFT);
+        });
 
 
         return view;

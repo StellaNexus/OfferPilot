@@ -157,6 +157,7 @@ public class QuestionFragment extends Fragment {
             practiceMode = args.getString("practice_mode");
             firstMessage = args.getString("first_message");
         }
+        sessionId = args.getLong("session_id", -1L);
 
         if ("quick".equals(practiceMode)){
             totalQuestionCount = 3;
@@ -170,11 +171,9 @@ public class QuestionFragment extends Fragment {
 
         if (sessionId > 0) {
             restoreMessages();
-
-            if (practiceFinished) {
-                chatInput.setEnabled(false);
-                sendButton.setEnabled(false);
-            }
+            chatInput.setEnabled(false);
+            sendButton.setEnabled(false);
+            chatInput.setHint("历史记录仅供查看");
         } else if (!sessionCreationStarted && !practiceFinished) {
             sessionCreationStarted = true;
 

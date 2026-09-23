@@ -18,6 +18,11 @@ public class PracticeRepository {
         void onMessagesLoaded(List<PracticeMessage> messages);
     }
 
+    public  interface  SessionsCallback{
+        void   onSessionsLoaded(List<PracticeSession> sessions);
+    }
+
+
     private final AppDatabase database;
     private final ExecutorService databaseExecutor;
     private final Handler mainHandler;
@@ -105,6 +110,16 @@ public class PracticeRepository {
             });
         });
     }
+
+    public void getSessions(SessionsCallback callback){
+        databaseExecutor.execute(()->{
+            List<PracticeSession> sessions =database.practiceSessionDao() .getAllByUpdatedTime();
+            mainHandler.post(()->{
+                callback.onSessionsLoaded(sessions);
+            });
+        });
+    }
+
 
     public void shutdown() {
         databaseExecutor.shutdown();
