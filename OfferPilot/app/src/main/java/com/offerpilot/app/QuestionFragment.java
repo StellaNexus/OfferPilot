@@ -31,6 +31,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.drawerlayout.widget.DrawerLayout;
+
+
 public class QuestionFragment extends Fragment {
     private String practiceMode;
     private String firstMessage;
@@ -74,6 +77,20 @@ public class QuestionFragment extends Fragment {
         scrollChat = view.findViewById(R.id.scroll_chat);
 
         practiceRepository = new PracticeRepository(requireContext());
+
+        DrawerLayout practiceDrawer = view.findViewById(R.id.practice_drawer);
+        View historyButton = view.findViewById(R.id.button_history);
+        View closeHistoryButton = view.findViewById(R.id.button_close_history);
+
+        historyButton.setOnClickListener(v -> {
+            loadHistorySessions(view, practiceDrawer);
+            practiceDrawer.openDrawer(Gravity.LEFT);
+        });
+
+        closeHistoryButton.setOnClickListener(v -> {
+            practiceDrawer.closeDrawer(Gravity.LEFT);
+        });
+
 
 
         chatInput = view.findViewById(R.id.edit_chat_input);
@@ -151,13 +168,18 @@ public class QuestionFragment extends Fragment {
         });
 
 
+
+
         Bundle args = getArguments();
 
         if (args != null) {
-            practiceMode = args.getString("practice_mode");
+            practiceMode = args.getString("practice_mode", "quick");
             firstMessage = args.getString("first_message");
+            sessionId = args.getLong("session_id", -1L);
+        } else {
+            practiceMode = "quick";
+            sessionId = -1L;
         }
-        sessionId = args.getLong("session_id", -1L);
 
         if ("quick".equals(practiceMode)){
             totalQuestionCount = 3;
@@ -423,6 +445,105 @@ public class QuestionFragment extends Fragment {
     }
 
 
+    private void loadHistorySessions(
+            View view,
+            DrawerLayout practiceDrawer) {
+
+        LinearLayout historyList =
+                view.findViewById(R.id.history_list_container);
+
+        TextView emptyHistory =
+                view.findViewById(R.id.text_empty_history);
+
+        historyList.removeAllViews();
+        emptyHistory.setVisibility(View.GONE);
+
+        practiceRepository.getSessions(sessions -> {
+            if (!isAdded() || getView() != view) {
+                return;
+            }
+
+            historyList.removeAllViews();
+
+            if (sessions.isEmpty()) {
+                emptyHistory.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            emptyHistory.setVisibility(View.GONE);
+
+            for (PracticeSession session : sessions) {
+                TextView item = createHistoryItem(
+                        session,
+                        practiceDrawer
+                );
+
+                historyList.addView(item);
+            }
+        });
+    }
+
+
+    private TextView createHistoryItem(
+            PracticeSession session,
+            DrawerLayout practiceDrawer) {
+
+        TextView item = new TextView(requireContext());
+
+        String modeText;
+
+        if ("quick".equals(session.getPracticeMode())) {
+            modeText = "快速练习";
+        } else if ("standard".equals(session.getPracticeMode())) {
+            modeText = "标准练习";
+        } else {
+            modeText = "完整面试";
+        }
+
+        String statusText;
+
+        if ("FINISHED".equals(session.getStatus())) {
+            statusText = "已完成";
+        } else {
+            statusText = "进行中";
+        }
+
+        item.setText(modeText + " · " + statusText);
+        item.setTextSize(16);
+        item.setTextColor(Color.rgb(40, 40, 40));
+        item.setPadding(12, 20, 12, 20);
+        item.setGravity(Gravity.CENTER_VERTICAL);
+        item.setClickable(true);
+        item.setFocusable(true);
+
+        item.setOnClickListener(v -> {
+            openHistorySession(session, practiceDrawer);
+        });
+
+        return item;
+    }
+
+    private void openHistorySession(
+            PracticeSession session,
+            DrawerLayout practiceDrawer) {
+
+        Bundle args = new Bundle();
+        args.putLong("session_id", session.getId());
+        args.putString("practice_mode", session.getPracticeMode());
+
+        QuestionFragment historyFragment =
+                new QuestionFragment();
+
+        historyFragment.setArguments(args);
+
+        practiceDrawer.closeDrawer(Gravity.LEFT);
+
+        getParentFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, historyFragment)
+                .replace(R.id.fragment_container, historyFragment)
+                .commit();
+    }
 
 
 }
