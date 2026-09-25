@@ -7,8 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingStart="20dp"
@@ -19,16 +18,16 @@
             android:id="@+id/button_history"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_marginStart="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="历史练习"
             android:padding="12dp"
             android:src="@drawable/ic_history"
-            app:tint="#333333"
+            app:layout_constraintBottom_toBottomOf="@id/text_practice_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/text_practice_title"
-            app:layout_constraintBottom_toBottomOf="@id/text_practice_title" />
-
-
+            app:layout_constraintVertical_bias="0.0"
+            app:tint="#333333" />
 
         <TextView
             android:id="@+id/text_practice_title"
@@ -143,76 +142,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/history_panel"
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
-            android:background="#FFFFFF"
-            android:elevation="12dp"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:layout_gravity="start">
-
-                <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="历史练习"
-                    android:textColor="#222222"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/button_close_history"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="关闭历史练习"
-                    android:src="@android:drawable/ic_menu_close_clear_cancel"
-                    app:tint="#555555" />
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/button_new_practice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="新建练习" />
-
-            <TextView
-                android:id="@+id/text_empty_history"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:text="暂无历史练习"
-                android:textColor="#888888"
-                android:textSize="14sp"
-                android:visibility="gone" />
-
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="16dp"
-                android:layout_weight="1"
-                android:fillViewport="true">
-                <LinearLayout
-                    android:id="@+id/history_list_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-
-
-            </ScrollView>
-        </LinearLayout>
+        <include layout="@layout/layout_history_drawer" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
